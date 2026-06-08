@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.DS_Store
+
+# Private local training notes, not part of the public solver project.
+CLL训练记录.md
