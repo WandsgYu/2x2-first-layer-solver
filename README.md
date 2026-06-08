@@ -1,59 +1,61 @@
-# 2x2 First Layer Solver
+# 二阶魔方底层求解器
 
-A small TypeScript solver for the 2x2 Rubik's Cube / Pocket Cube. It does not solve the whole cube; it searches for the shortest move sequence that restores one complete layer.
+[English README](./README.en.md)
 
-Keywords: `2x2 cube`, `Rubik's Cube`, `Pocket Cube`, `first layer solver`, `layer solver`, `BFS`, `WCA scramble`, `TypeScript`, `二阶魔方`, `魔方底层求解器`.
+一个用 TypeScript 写的 2x2 魔方 / Pocket Cube 底层求解器。它不是完整还原器，只搜索“某一个颜色的一整层完整复原”的最短步骤。
 
-## What It Does
+关键词：`二阶魔方`、`魔方底层求解器`、`2x2 cube`、`Rubik's Cube`、`Pocket Cube`、`first layer solver`、`BFS`、`WCA scramble`、`TypeScript`。
 
-- Parses standard cube notation: `U D L R F B`, with `'` and `2`.
-- Applies a scramble from the solved 2x2 state.
-- Tries all 6 possible layer colors.
-- Checks a complete layer, not just four same-color face stickers. The four corner pieces must be in the correct positions and orientations, including side colors.
-- Uses BFS with simple pruning: no consecutive turns on the same face.
-- Provides both a CLI and a minimal web UI.
+## 功能
 
-## Coordinate System
+- 解析标准魔方公式：`U D L R F B`，支持 `'` 和 `2`。
+- 从复原状态应用打乱公式，得到当前二阶魔方状态。
+- 对 6 个颜色分别搜索完整一层复原方案。
+- 判断的是“完整一层”，不是只看底面 4 个贴纸同色；该层 4 个角块的位置和朝向都必须正确，侧面颜色也必须正确。
+- 使用 BFS 搜索，并剪枝掉连续转同一个面的无意义分支。
+- 提供命令行和极简网页界面。
 
-The fixed color scheme is:
+## 坐标和配色
 
-- `U = white / 白色`
-- `D = yellow / 黄色`
-- `F = green / 绿色`
-- `B = blue / 蓝色`
-- `R = red / 红色`
-- `L = orange / 橙色`
+固定配色：
 
-Solutions keep the original scrambled coordinate system. The cube is not reoriented when trying different target colors.
+- `U = 白色`
+- `D = 黄色`
+- `F = 绿色`
+- `B = 蓝色`
+- `R = 红色`
+- `L = 橙色`
 
-## Web UI
+求解时保持打乱后的外部坐标系不动。也就是说，不会因为目标底色不同而重新转向魔方。
+
+## 网页使用
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open:
+打开：
 
 ```text
 http://127.0.0.1:5173/
 ```
 
-The web UI can:
+网页功能：
 
-- Generate 8-10 move WCA-style `U / R / F` scrambles.
-- Show previous and next scrambles.
-- Show the scrambled cube as a flat net immediately.
-- Output all layer-color solutions sorted by move count.
-- Show a flat net after every move in each solution.
+- 自动生成 8-10 步 `U / R / F` 风格打乱。
+- 支持上一条 / 下一条公式。
+- 打乱后状态会直接显示为平面图。
+- 默认输出全部底色求解，并按步数从小到大排序。
+- 每个解法都会显示每一步之后的魔方平面图。
 
-## CLI
+## 命令行使用
 
 ```bash
 npm run solve -- "R U R' U' F2"
 ```
 
-Output example:
+输出示例：
 
 ```text
 底色：蓝色
@@ -62,29 +64,29 @@ Output example:
 完成效果：蓝色底层完整复原
 ```
 
-All target colors:
+输出全部底色：
 
 ```bash
 npm run solve -- --all "U2 R2 F' U2 F2 U2 R F' U"
 ```
 
-Increase BFS depth:
+调高 BFS 搜索深度：
 
 ```bash
 npm run solve -- --max-depth 9 "R U R' U' F2"
 ```
 
-## Tests
+## 测试
 
 ```bash
 npm test
 ```
 
-The test suite includes parser checks, move consistency checks, inverse-scramble validation, solution validation, sorting validation, and a WCA-turn-direction regression case.
+测试覆盖公式解析、转动一致性、逆公式还原、解法有效性、排序，以及 WCA 转动方向的回归用例。
 
-## Implementation Notes
+## 实现说明
 
-- State model: 24 visible corner stickers.
-- Search moves: all 18 face turns.
-- Default BFS depth: `8`.
-- Not a full 2x2 solver. It intentionally stops once a complete layer is restored.
+- 状态模型：24 个可见角贴纸。
+- 搜索 move set：18 个基本面转。
+- 默认 BFS 深度：`8`。
+- 这个项目只求完整一层，不求完整复原整个二阶魔方。
