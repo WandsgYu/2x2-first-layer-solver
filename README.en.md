@@ -12,6 +12,7 @@ Keywords: `2x2 cube`, `Rubik's Cube`, `Pocket Cube`, `first layer solver`, `laye
 - Checks a complete layer, not just four same-color face stickers. The four corner pieces must be in the correct positions and orientations, including side colors.
 - Uses BFS with simple pruning: no consecutive turns on the same face.
 - Provides both a CLI and a minimal web UI.
+- Adds Human Mode: instead of only minimizing move count, it favors construction-friendly solutions with step-by-step training prompts.
 
 ## Coordinate System
 
@@ -44,7 +45,8 @@ The web UI can:
 - Generate 8-10 move WCA-style `U / R / F` scrambles.
 - Show previous and next scrambles.
 - Show the scrambled cube as a flat net immediately.
-- Output all layer-color solutions sorted by move count.
+- Optimal Mode: output all layer-color optimal solutions sorted by move count.
+- Human Mode: recommend a more human-friendly construction path and ask what the next step should be before revealing the answer.
 - Show a flat net after every move in each solution.
 
 ## CLI
@@ -87,4 +89,5 @@ The test suite includes parser checks, move consistency checks, inverse-scramble
 - State model: 24 visible corner stickers.
 - Search moves: all 18 face turns.
 - Default BFS depth: `8`.
+- Human Mode collects candidates near the optimal depth and rescales them using move count, face changes, structure damage, bar formation, and full-face formation.
 - Not a full 2x2 solver. It intentionally stops once a complete layer is restored.

@@ -98,13 +98,41 @@ input {
   font-size: 15px;
 }
 
+.mode-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #cfd7de;
+  border-radius: 8px;
+  background: #f6f9fb;
+}
+
+.mode-tab {
+  min-height: 34px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 12px;
+  background: transparent;
+  color: #53606b;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.mode-tab.active {
+  background: #ffffff;
+  color: #17212b;
+  box-shadow: 0 1px 4px rgb(22 35 48 / 12%);
+}
+
 .coordinate-note {
   color: #333f49;
   font-size: 15px;
 }
 
 .nav-button,
-.primary-button {
+.primary-button,
+.secondary-button {
   min-height: 44px;
   border-radius: 6px;
   border: 1px solid #bcc8d2;
@@ -115,6 +143,13 @@ input {
 .nav-button {
   background: #ffffff;
   color: #17212b;
+}
+
+.secondary-button {
+  background: #ffffff;
+  color: #165b85;
+  border-color: #9bb8ca;
+  font-weight: 650;
 }
 
 .primary-button {
@@ -130,7 +165,8 @@ input {
 }
 
 .nav-button:hover,
-.primary-button:hover {
+.primary-button:hover,
+.secondary-button:hover {
   filter: brightness(0.96);
 }
 
@@ -213,6 +249,98 @@ input {
   border: 1px solid #dfe5ea;
   border-radius: 8px;
   background: #ffffff;
+}
+
+.human-summary,
+.thinking-card,
+.human-step-card {
+  margin-top: 12px;
+  border: 1px solid #dfe5ea;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.human-summary p,
+.human-step-card p,
+.thinking-card p {
+  margin: 8px 0;
+  color: #333f49;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.thinking-card h3,
+.human-step-card h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.question-box {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #e7edf2;
+}
+
+.choice-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.choice-list li {
+  padding: 8px 10px;
+  border: 1px solid #dfe5ea;
+  border-radius: 6px;
+  background: #fbfcfd;
+  color: #333f49;
+}
+
+.revealed-plan {
+  display: grid;
+  gap: 12px;
+}
+
+.human-step-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.move-pill {
+  flex: none;
+  border-radius: 999px;
+  background: #eaf4fa;
+  color: #165b85;
+  padding: 4px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.state-change {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  background: #f6f9fb;
+  border: 1px solid #e2e8ee;
+}
+
+.state-change p {
+  margin: 4px 0;
+}
+
+.complete-message {
+  padding: 12px;
+  border-radius: 6px;
+  background: #eef9f2;
+  color: #1c6f3b;
+  font-weight: 650;
 }
 
 .solution-header {
@@ -374,6 +502,18 @@ input {
   .controls {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .mode-tabs {
+    width: 100%;
+  }
+
+  .mode-tab {
+    flex: 1;
+  }
+
+  .choice-list {
+    grid-template-columns: 1fr;
   }
 
   .cube-net {

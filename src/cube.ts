@@ -10,6 +10,16 @@ interface Sticker {
   color: Face;
 }
 
+export interface LayerAnalysis {
+  face: Face;
+  colorName: string;
+  completedBlocks: number;
+  hasBar: boolean;
+  barLabel?: string;
+  hasFullFace: boolean;
+  isCompleteLayer: boolean;
+}
+
 const FACE_NORMALS: Record<Face, Vec3> = {
   U: [0, 1, 0],
   D: [0, -1, 0],
@@ -100,6 +110,22 @@ export function solvedLayerFaces(state: CubeState): Face[] {
   return ALL_FACES.filter((face) => isLayerSolved(state, face));
 }
 
+export function analyzeLayer(state: CubeState, face: Face): LayerAnalysis {
+  const cornerPositions = targetLayerCornerPositions(face);
+  const completedCorners = cornerPositions.filter((position) => isCornerSolvedAt(state, position));
+  const bar = findLayerBar(completedCorners, face);
+
+  return {
+    face,
+    colorName: FACE_COLOR_NAMES[face],
+    completedBlocks: completedCorners.length,
+    hasBar: bar !== undefined,
+    barLabel: bar,
+    hasFullFace: faceStickers(state, face).every((color) => color === face),
+    isCompleteLayer: completedCorners.length === 4,
+  };
+}
+
 export type NetState = Record<Face, Face[]>;
 
 export function getNetState(state: CubeState): NetState {
@@ -170,6 +196,73 @@ function buildMovePermutations(): Record<Face, number[]> {
   }
 
   return result;
+}
+
+function targetLayerCornerPositions(face: Face): Vec3[] {
+  const axis = FACE_AXIS[face];
+  const layer = FACE_LAYER[face];
+  const values = [-1, 1];
+  const positions: Vec3[] = [];
+
+  for (const x of values) {
+    for (const y of values) {
+      for (const z of values) {
+        const position: Vec3 = [x, y, z];
+        if (position[axis] === layer) positions.push(position);
+      }
+    }
+  }
+
+  return positions;
+}
+
+function isCornerSolvedAt(state: CubeState, position: Vec3): boolean {
+  return STICKERS.every((sticker, index) => {
+    if (!vecEquals(sticker.position, position)) return true;
+    return state[index] === SOLVED_STATE[index];
+  });
+}
+
+function findLayerBar(completedCorners: Vec3[], face: Face): string | undefined {
+  for (let i = 0; i < completedCorners.length; i += 1) {
+    for (let j = i + 1; j < completedCorners.length; j += 1) {
+      const sharedFace = sharedSideFace(completedCorners[i], completedCorners[j], face);
+      if (sharedFace) return `${FACE_COLOR_NAMES[face].replace("色", "")}${FACE_COLOR_NAMES[sharedFace].replace("色", "")}条`;
+    }
+  }
+
+  return undefined;
+}
+
+function sharedSideFace(a: Vec3, b: Vec3, targetFace: Face): Face | undefined {
+  const targetAxis = FACE_AXIS[targetFace];
+  let diffCount = 0;
+  let sameSideAxis: 0 | 1 | 2 | undefined;
+
+  for (const axis of [0, 1, 2] as const) {
+    if (axis === targetAxis) continue;
+    if (a[axis] !== b[axis]) {
+      diffCount += 1;
+    } else {
+      sameSideAxis = axis;
+    }
+  }
+
+  if (diffCount !== 1 || sameSideAxis === undefined) return undefined;
+  return faceFromAxisLayer(sameSideAxis, a[sameSideAxis]);
+}
+
+function faceFromAxisLayer(axis: 0 | 1 | 2, layer: number): Face {
+  if (axis === 0) return layer === 1 ? "R" : "L";
+  if (axis === 1) return layer === 1 ? "U" : "D";
+  return layer === 1 ? "F" : "B";
+}
+
+function faceStickers(state: CubeState, face: Face): Face[] {
+  return STICKERS
+    .map((sticker, index) => ({ sticker, index }))
+    .filter(({ sticker }) => vecEquals(sticker.normal, FACE_NORMALS[face]))
+    .map(({ index }) => state[index] as Face);
 }
 
 function stickersForFace(

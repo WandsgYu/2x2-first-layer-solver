@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { formatAlg, invertAlg, parseAlg } from "../src/alg.js";
 import { SOLVED_STATE, applyAlg, applyMove, isLayerSolved, isSolved } from "../src/cube.js";
+import { solveHumanLayer } from "../src/human.js";
 import { solveAllLayers, solveBestLayer } from "../src/solver.js";
 
 test("parse standard moves with prime and double suffixes", () => {
@@ -69,4 +70,23 @@ test("regression: U/D turns use standard WCA direction", () => {
   const solutions = solveAllLayers(scrambled, { maxDepth: 8 });
   assert.equal(solutions[0].colorName, "橙色");
   assert.equal(solutions[0].moveText, "R F U2");
+});
+
+test("human mode returns a valid explained layer solution", () => {
+  const scramble = parseAlg("U2 R2 F' U2 F2 U2 R F' U");
+  const scrambled = applyAlg(SOLVED_STATE, scramble);
+  const solution = solveHumanLayer(scrambled, 8);
+
+  assert.ok(solution);
+  assert.equal(solution.steps.length, solution.moves.length);
+  assert.ok(solution.score < Number.POSITIVE_INFINITY);
+
+  const result = applyAlg(scrambled, solution.moves);
+  assert.equal(isLayerSolved(result, solution.face), true);
+
+  for (const step of solution.steps) {
+    assert.ok(step.goal.length > 0);
+    assert.ok(step.reason.length > 0);
+    assert.match(step.prompt, /^[ABCD]\./);
+  }
 });
