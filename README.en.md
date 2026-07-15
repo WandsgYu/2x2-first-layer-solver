@@ -1,5 +1,9 @@
 # 2x2 First Layer Solver
 
+[![CI](https://github.com/WandsgYu/2x2-first-layer-solver/actions/workflows/ci.yml/badge.svg)](https://github.com/WandsgYu/2x2-first-layer-solver/actions/workflows/ci.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 A small TypeScript solver for the 2x2 Rubik's Cube / Pocket Cube. It does not solve the whole cube; it searches for the shortest move sequence that restores one complete layer.
 
 Keywords: `2x2 cube`, `Rubik's Cube`, `Pocket Cube`, `first layer solver`, `layer solver`, `BFS`, `WCA scramble`, `TypeScript`, `二阶魔方`, `魔方底层求解器`.

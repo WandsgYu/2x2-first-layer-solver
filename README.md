@@ -3,7 +3,7 @@
 [English](README.en.md)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-8%20passing-16a34a)
+[![CI](https://github.com/WandsgYu/2x2-first-layer-solver/actions/workflows/ci.yml/badge.svg)](https://github.com/WandsgYu/2x2-first-layer-solver/actions/workflows/ci.yml)
 ![Search](https://img.shields.io/badge/search-BFS-7c3aed)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -118,7 +118,7 @@ npm run solve -- --max-depth 9 "R U R' U' F2"
 npm test
 ```
 
-当前 8 个测试覆盖：
+自动化测试覆盖：
 
 - WCA 公式解析和后缀处理；
 - 单次转动四次回到原状态；
